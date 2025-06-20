@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -14,4 +10,68 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* src/index.css - Add this to the very end */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Tailwind Colors (if not already in tailwind.config.js) */
+/* Ensure these match your tailwind.config.js if you configured them there */
+@layer base {
+  :root {
+    --color-olive-light: #F0F2EB; /* Lightest shade, almost white */
+    --color-olive: #8a9a5b; /* Main olive green */
+    --color-olive-dark: #6B7746; /* Darker olive for accents */
+    --color-olive-accent: #5a6639; /* Even darker, strong accent */
+    --color-olive-darker: #4a542b; /* For hover states etc. */
+  }
+}
+
+/* Apply custom colors using CSS variables if not already handled by Tailwind config */
+.text-olive-light { color: var(--color-olive-light); }
+.text-olive { color: var(--color-olive); }
+.text-olive-dark { color: var(--color-olive-dark); }
+.text-olive-accent { color: var(--color-olive-accent); }
+.text-olive-darker { color: var(--color-olive-darker); }
+
+.bg-olive-light { background-color: var(--color-olive-light); }
+.bg-olive { background-color: var(--color-olive); }
+.bg-olive-dark { background-color: var(--color-olive-dark); }
+.bg-olive-accent { background-color: var(--color-olive-accent); }
+.bg-olive-darker { background-color: var(--color-olive-darker); }
+
+
+/* Global styles for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* Styles for the header's sticky effect */
+.header-sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: white; /* Or any color that matches your header */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Smooth transition for header */
+.header-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Placeholder for future active navigation link styling */
+.nav-link.active {
+  font-weight: bold;
+  color: var(--color-olive-accent); /* Example active color */
+}
+
+/* Ensure scroll targets have a little padding when scrolled to */
+.scroll-target {
+    scroll-margin-top: 80px; /* Adjust based on your fixed header height */
 }
