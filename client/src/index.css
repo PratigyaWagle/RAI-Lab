@@ -1,3 +1,5 @@
+/* src/index.css */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -12,14 +14,12 @@ code {
     monospace;
 }
 
-/* src/index.css - Add this to the very end */
-
+/* Tailwind Directives - Ensure these are present */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Tailwind Colors (if not already in tailwind.config.js) */
-/* Ensure these match your tailwind.config.js if you configured them there */
+/* Custom Tailwind Colors using CSS variables */
 @layer base {
   :root {
     --color-olive-light: #F0F2EB; /* Lightest shade, almost white */
@@ -30,7 +30,7 @@ code {
   }
 }
 
-/* Apply custom colors using CSS variables if not already handled by Tailwind config */
+/* Apply custom colors to classes (if not already handled by your Tailwind config setup) */
 .text-olive-light { color: var(--color-olive-light); }
 .text-olive { color: var(--color-olive); }
 .text-olive-dark { color: var(--color-olive-dark); }
@@ -60,18 +60,61 @@ html {
   z-index: 1000;
 }
 
-/* Smooth transition for header */
+/* Smooth transition for header (general) */
 .header-transition {
     transition: all 0.3s ease-in-out;
 }
 
-/* Placeholder for future active navigation link styling */
+/* Styles for header navigation links (nav-link) */
+.nav-link {
+  display: inline-block;
+  position: relative; /* Crucial for ::after positioning */
+  padding-bottom: 2px; /* Space for the underline */
+  color: white; /* Default text color for non-hovered/non-active links */
+  /* Transition for the text color */
+  transition: color 0.3s ease-out;
+}
+
+/* Pseudo-element for the smooth underline effect */
+.nav-link::after {
+  content: ''; /* Required for pseudo-elements */
+  position: absolute;
+  width: 0; /* Starts hidden */
+  height: 2px; /* Underline thickness */
+  left: 0;
+  bottom: 0;
+  background-color: var(--color-olive-light); /* Underline color */
+  transition: width 0.3s ease-out; /* Smoothly animates width */
+}
+
+/* Hover state for .nav-link */
+.nav-link:hover {
+  color: var(--color-olive-light); /* Text color on hover */
+}
+
+/* When hovering, expand the underline pseudo-element */
+.nav-link:hover::after {
+  width: 100%; /* Underline slides in */
+}
+
+/* Active state for .nav-link */
 .nav-link.active {
   font-weight: bold;
-  color: var(--color-olive-accent); /* Example active color */
+  color: var(--color-olive-light); /* Text color for the active link (prevents vanishing) */
+}
+
+/* Ensure active link also has its underline visible */
+.nav-link.active::after {
+  width: 100%; /* Underline is permanently visible for active link */
 }
 
 /* Ensure scroll targets have a little padding when scrolled to */
 .scroll-target {
     scroll-margin-top: 80px; /* Adjust based on your fixed header height */
 }
+
+/* Custom style for the Vision Title */
+.custom-vision-title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+

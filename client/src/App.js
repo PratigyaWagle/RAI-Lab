@@ -1,47 +1,63 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import './index.css';
+import './index.css'; // Your global styles
 
+// Import your components for the main page
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
 import ProjectsSection from './components/ProjectsSection';
-import PublicationsSection from './components/PublicationsSection';
-import TeamSection from './components/TeamSection';
+import NewsSection from './components/NewsSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 
+// Import your dedicated pages
 import AllProjectsPage from './pages/AllProjectsPage';
 import AllTeamMembersPage from './pages/AllTeamMembersPage';
+import AllPublicationsPage from './pages/AllPublicationsPage';
+import AllNewsPage from './pages/AllNewsPage';
+
+// Import the ScrollToTop component
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <Router> {/* This wraps your entire application for routing */}
+    <Router>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col antialiased">
-        <Header /> {/* Header appears on all pages, outside the Routes */}
+        <Header />
 
-        <Routes> {/* This is the SINGLE, main Routes block for your application */}
+        <Routes>
+          {/* Route for the Home Page */}
           <Route
             path="/"
-            element={ // This element renders your home page sections
+            element={
               <main className="flex-grow">
-                <HeroSection />
-                <AboutSection />
-                <ProjectsSection />
-                <PublicationsSection />
-                <TeamSection />
-                <ContactSection />
+                <HeroSection id="hero" />
+                <AboutSection id="about" />
+                <ProjectsSection id="projects-section" />
+                <NewsSection id="news-section" />
+                <ContactSection id="contact" />
               </main>
             }
           />
-          {/* This is your dedicated projects page route */}
-          <Route path="/projects" element={<AllProjectsPage />} />
-          {/* This is your dedicated team members page route */}
+
+          {/* Route for the All Projects Page - PATH UPDATED TO MATCH FOOTER LINK */}
+          <Route path="/projects-grants" element={<AllProjectsPage />} />
+
+          {/* Route for the All Team Members Page */}
           <Route path="/team" element={<AllTeamMembersPage />} />
+
+          {/* Route for the All Publications Page */}
+          <Route path="/publications" element={<AllPublicationsPage />} />
+
+          {/* Route for the All News Page */}
+          <Route path="/news" element={<AllNewsPage />} />
         </Routes>
 
-        <Footer /> {/* Footer appears on all pages, outside the Routes */}
+        <Footer />
       </div>
     </Router>
   );

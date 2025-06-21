@@ -1,9 +1,11 @@
 // src/components/ContactSection.jsx
 import React from 'react';
 
-function ContactSection() {
+// Accept the 'id' prop here
+function ContactSection({ id }) {
   return (
-    <section id="contact" className="scroll-target py-20 bg-gray-100">
+    // Apply the id prop to the section element
+    <section id={id} className="scroll-target py-20 bg-gray-100">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-8 ">Contact Us</h2>
         <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto ">
@@ -17,7 +19,7 @@ function ContactSection() {
           <div className="flex items-start mb-6">
             {/* You might need to add Font Awesome or similar icon library for 'fa-map-marker-alt' to show.
                 For now, it's a placeholder. If icons don't show, you can remove the <i> tag. */}
-            <i className="fas fa-map-marker-alt text-olive-accent text-2xl mr-4 mt-1"></i> 
+            <i className="fas fa-map-marker-alt text-olive-accent text-2xl mr-4 mt-1"></i>
             <div>
               <h4 className="text-xl font-medium text-gray-800 mb-1">Visit Us</h4>
               <p className="text-gray-700">
