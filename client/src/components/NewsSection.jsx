@@ -1,15 +1,24 @@
 // src/components/NewsSection.jsx
 import React, { useState, useEffect } from 'react';
+// It seems you're directly fetching from localhost:5000/api/news here.
+// If you intend to use the centralized fetchNews from appData.js, you might uncomment the line below
+// import { fetchNews } from '../data/appData';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 const NewsSection = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Define the custom olive green color
+  const oliveGreen = '#4a542b';
+
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/news'); // Adjust URL if your backend is on a different host/port
+        // Your existing fetch call. Note: If you want to use the proxy, this should be '/api/news'
+        // or if you want to use the centralized function, it should be 'const data = await fetchNewsFromAppData();'
+        const response = await fetch('http://localhost:5000/api/news'); 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -71,20 +80,25 @@ const NewsSection = () => {
               {/* Format date for better readability */}
               <p className="text-sm text-gray-500 mb-4">{new Date(item.date).toLocaleDateString()}</p>
               <p className="text-gray-700 mb-4">{item.description}</p>
-              <a href={item.link} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              {/* Changed to Link and applied custom color */}
+              <Link to={`/news/${item._id}`} // Assuming you have a route for individual news items
+                    className="hover:underline" // Retained underline on hover
+                    style={{ color: oliveGreen }} // Applied custom olive green color
+              >
                 Read More
-              </a>
+              </Link>
             </div>
           ))}
         </div>
         {/* Link to all news page - ensure this path matches your App.js route */}
         <div className="text-center mt-12">
-          <a
-            href="/news" // Make sure this path corresponds to your AllNewsPage route in App.js
-            className="inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-full hover:bg-blue-700 transition duration-300"
+          <Link
+            to="/news" // Make sure this path corresponds to your AllNewsPage route in App.js
+            className="inline-block font-semibold py-3 px-8 rounded-full transition duration-300 hover:scale-105"
+            style={{ backgroundColor: oliveGreen, color: 'white' }} // Applied custom olive green background and white text
           >
             View All News
-          </a>
+          </Link>
         </div>
       </div>
     </section>
