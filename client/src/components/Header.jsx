@@ -4,14 +4,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [activeSection, setActiveSection] = useState('');
+  const [isPublicationsDropdownOpen, setIsPublicationsDropdownOpen] = useState(false); // NEW state for dropdown
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       if (location.pathname === '/') {
-        // News section ID removed from scroll tracking as it's now a separate page
-        const sections = ['hero', 'about', 'projects-section', 'contact']; // 'news-section' removed from here
+        const sections = ['hero', 'about', 'projects-section', 'contact'];
         const offset = 100;
 
         let currentActive = '';
@@ -49,7 +49,27 @@ function Header() {
     } else {
       navigate('/', { state: { scrollToId: sectionId } });
     }
+    setIsPublicationsDropdownOpen(false); // Close dropdown on any nav link click
   };
+
+  // Function to toggle the dropdown
+  const togglePublicationsDropdown = () => {
+    setIsPublicationsDropdownOpen(prevState => !prevState);
+  };
+
+  // Close dropdown if user clicks outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isPublicationsDropdownOpen && !event.target.closest('#publications-dropdown-container')) {
+        setIsPublicationsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isPublicationsDropdownOpen]);
+
 
   return (
     <header id="header" className="w-full py-4 bg-olive-accent text-white shadow-md sticky top-0 z-10">
@@ -72,21 +92,54 @@ function Header() {
             </li>
             <li>
               <Link
-                to="/projects"
-                className={`nav-link text-white hover:text-olive-light transition-colors ${location.pathname === '/projects' ? 'active' : ''}`}
+                to="/projects-grants"
+                className={`nav-link text-white hover:text-olive-light transition-colors ${location.pathname === '/projects-grants' ? 'active' : ''}`}
               >
                 Projects & Grants
               </Link>
             </li>
-            <li>
-              <Link
-                to="/publications"
-                className={`nav-link text-white hover:text-olive-light transition-colors ${location.pathname === '/publications' ? 'active' : ''}`}
+            {/* NEW: Publications Dropdown */}
+            <li className="relative" id="publications-dropdown-container">
+              <button
+                onClick={togglePublicationsDropdown}
+                className={`nav-link text-white hover:text-olive-light transition-colors focus:outline-none ${location.pathname.startsWith('/publications') ? 'active' : ''}`}
               >
-                Publications
-              </Link>
+                Publications <span className="ml-1">&#9662;</span> {/* Down arrow */}
+              </button>
+              {isPublicationsDropdownOpen && (
+                <ul className="absolute left-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-2 z-20">
+                  <li>
+                    <Link
+                      to="/publications/journal"
+                      onClick={() => setIsPublicationsDropdownOpen(false)} // Close dropdown on click
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      Journal Publications
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/publications/conference"
+                      onClick={() => setIsPublicationsDropdownOpen(false)} // Close dropdown on click
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      Conference Publications
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/publications/poster"
+                      onClick={() => setIsPublicationsDropdownOpen(false)} // Close dropdown on click
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
+                      Poster Publications
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            {/* News Link: Now a direct Link to the /news page */}
+            {/* End NEW: Publications Dropdown */}
+
             <li>
               <Link
                 to="/news"

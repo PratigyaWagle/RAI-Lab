@@ -1,100 +1,85 @@
-// src/pages/AllTeamMembersPage.jsx
+// src/components/SocialIcon.jsx
 import React from 'react';
-import teamMembersData from '../data/teamMembersData';
-import SocialIcon from '../components/SocialIcon';
 
-function AllTeamMembersPage() {
-  const handleImageError = (e) => {
-    e.target.onerror = null;
-    e.target.src = '/images/placeholder-profile.jpg';
-    console.error("Failed to load image:", e.target.src);
-  };
+/**
+ * Renders a social media icon as a clickable link.
+ * Includes SVG icons for email and LinkedIn.
+ *
+ * @param {object} props - The component props.
+ * @param {'email' | 'linkedin'} props.type - The type of social icon to render.
+ * @param {string} props.url - The URL the icon should link to.
+ * @param {string} props.label - Accessible label for the link (e.g., "Email Link").
+ * @param {string} [props.className=''] - Additional Tailwind CSS classes for styling the link wrapper.
+ */
+function SocialIcon({ type, url, label, className = '' }) {
+  let iconSvg = null;
+  // Base styling for the link wrapper (the clickable area around the icon)
+  // The size and color of the SVG itself within this wrapper will be controlled by className passed from parent
+  const baseClasses = "inline-flex items-center justify-center p-2 rounded-full";
+
+  // Validate the URL: must be a string and start with a known protocol
+  const isValidUrl = typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto:'));
+
+  if (!isValidUrl) {
+    // Log a warning in development mode for easier debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`SocialIcon: Invalid or missing URL for type "${type}". URL provided: "${url}"`);
+    }
+    return null; // Do not render the icon if the URL is invalid or missing
+  }
+
+  switch (type) {
+    case 'email':
+      iconSvg = (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-full h-full" // Use w-full h-full to make SVG fill its parent (controlled by className from AllTeamMembersPage)
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H4.5a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5H4.5A2.25 2.25 0 0 0 2.25 6.75m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+          />
+        </svg>
+      );
+      break;
+    case 'linkedin':
+      iconSvg = (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-full h-full" // Use w-full h-full to make SVG fill its parent (controlled by className from AllTeamMembersPage)
+        >
+          <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38-.991-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 6.4v9.1h-4.96v-9.1h4.96zm8.858-1.114c-2.88 0-3.551 1.921-3.551 3.55v6.664h4.893v-6.906c0-1.579.704-2.51 1.836-2.51 1.132 0 1.835.931 1.835 2.51v6.906h4.893v-6.664c0-2.296-1.189-4.886-4.665-4.886z"/>
+        </svg>
+      );
+      break;
+    default:
+      // If an unsupported 'type' is passed, log a warning and don't render an icon
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`SocialIcon: Unsupported social icon type specified: "${type}". Please check the 'type' prop.`);
+      }
+      return null; // Don't render anything if the type is not recognized
+  }
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gray-50">
-      <div className="container mx-auto">
-        <div className="lg:flex lg:space-x-12">
-
-          {/* Left Column: Titles and Description */}
-          <div className="lg:w-1/3 mb-8 lg:mb-0">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">Our Team</h1>
-            <p className="mt-1 text-lg text-gray-600">Meet the researchers, students, and staff behind our work</p>
-          </div>
-
-          {/* Right Column: Team Members List */}
-          <div className="lg:w-2/3">
-
-            {/* "Current Team" heading */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-700 flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h-2v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2H3m14 0h2a2 2 0 002-2v-2a2 2 0 00-2-2H7a2 2 0 00-2 2v2a2 2 0 002 2h2m4-12v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m.01 6a1 1 0 102 0 1 1 0 00-2 0zm7 0a1 1 0 102 0 1 1 0 00-2 0z" />
-                 </svg>
-                Current Team
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              {teamMembersData.map(member => (
-                <div key={member.id} className="bg-white rounded-lg shadow-sm overflow-hidden md:flex items-start p-6 border border-gray-100">
-                  {/* Image Section (Left) */}
-                  <div className="flex-shrink-0 flex justify-center mb-4 md:mb-0 md:mr-6">
-                    <img
-                      src={`/images/${member.image}`}
-                      alt={member.name}
-                      className="w-32 h-32 rounded-lg object-cover"
-                      onError={handleImageError}
-                    />
-                  </div>
-
-                  {/* Text Content Section (Right) */}
-                  <div className="flex-grow text-center md:text-left">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-gray-600 text-sm mb-3">{member.title}</p>
-                    {member.description && (
-                       <p className="text-gray-700 text-sm leading-relaxed mb-4">{member.description}</p>
-                    )}
-
-                    {/* Social Icons - Removed "View Profile" button */}
-                    <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                        {/* Removed: View Profile Button */}
-                        {/* {member.social.profile && (
-                           <a href={member.social.profile} target="_blank" rel="noopener noreferrer"
-                              className="inline-flex items-center px-3 py-1.5 border border-blue-700 text-sm font-medium rounded-md shadow-sm text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                               View Profile
-                           </a>
-                        )} */}
-                        {/* Social Icons using the improved SocialIcon component */}
-                        {member.social.email && (
-                          <SocialIcon type="email" url={member.social.email} label="Email" />
-                        )}
-
-                        {member.social.linkedin && (
-                          <SocialIcon type="linkedin" url={member.social.linkedin} label="LinkedIn" />
-                        )}
-
-                        {member.social.twitter && (
-                            <SocialIcon type="twitter" url={member.social.twitter} label="Twitter" />
-                        )}
-                        {member.social.googleScholar && (
-                            <SocialIcon type="googleScholar" url={member.social.googleScholar} label="Google Scholar" />
-                        )}
-                        {member.social.researchgate && (
-                            <SocialIcon type="researchgate" url={member.social.researchgate} label="ResearchGate" />
-                        )}
-                        {member.social.website && (
-                            <SocialIcon type="website" url={member.social.website} label="Website" />
-                        )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a
+      href={url}
+      target="_blank" // Opens link in a new tab
+      rel="noopener noreferrer" // Security best practice for target="_blank"
+      aria-label={label} // Important for accessibility
+      className={`${baseClasses} ${className}`} // Combines base and custom classes
+    >
+      {iconSvg}
+    </a>
   );
 }
 
-export default AllTeamMembersPage;
+export default SocialIcon;

@@ -1,83 +1,115 @@
 // src/components/ProjectsSection.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { fetchProjects } from '../data/appData';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
-// Dummy data for demonstration purposes.
-// In a real application, this data would likely come from an API or a more structured source.
-const allProjectsData = [
-  {
-    id: 1,
-    title: "Refining the Understanding of Parking Space Requirements and...",
-    description: "The goal of this project will be to explore, document, and broaden the collective understanding of mandated parking minimums within Minnesota and the region. Specifically, this project will examine the long-term benefits and...",
-    link: "#"
-  },
-  {
-    id: 2,
-    title: "0-7226: Analyze Operational and Safety Improvements Associated...",
-    description: "The objective of this project is to document the benefits of innovative intersection designs, develop case studies of successfully implemented intersections in Texas, and provide resources to support the adoption and...",
-    link: "#"
-  },
-  {
-    id: 3,
-    title: "0-7222: Develop Crash Predictive Methods for Frontage Roads...",
-    description: "Develop Safety Performance Functions (SPFs) and Crash Modification Factors (CMFs) for ramp terminals and frontage road intersections, evaluate the safety impact of weaving on frontage roads...",
-    link: "#"
-  },
-  {
-    id: 4,
-    title: "NCHRP 17-134: Center Line Buffer Areas for Safety: Implementation...",
-    description: "The objective of this project is to develop guidelines and a tool for the implementation of center line buffer areas, with a focus on rural two-lane highways. The project will evaluate the safety benefits of center line buffer...",
-    link: "#"
-  },
-  {
-    id: 5,
-    title: "Ethical AI Framework", // This project will NOT be shown on homepage
-    description: "Developing a comprehensive framework for integrating ethical considerations into the AI development lifecycle.",
-    link: "#"
-  },
-  {
-    id: 6,
-    title: "Bias Detection in ML Models", // This project will NOT be shown on homepage
-    description: "Researching and implementing tools to automatically detect and mitigate biases in machine learning algorithms.",
-    link: "#"
-  }
-];
+/**
+ * ProjectsSection Component
+ * Displays a list of projects, with options to limit the number shown
+ * and to display it as a featured section for the homepage.
+ *
+ * @param {number} [limit] - Optional. The maximum number of projects to display. If not provided, all fetched projects are shown.
+ * @param {boolean} [isFeatured=false] - Optional. If true, renders a "Featured Projects" title and "View All" button.
+ */
+function ProjectsSection({ limit, isFeatured = false }) {
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    // useEffect hook to fetch project data when the component mounts or 'limit' prop changes
+    useEffect(() => {
+        const getProjects = async () => {
+            try {
+                const data = await fetchProjects(); // Fetch all projects
+                console.log("Data fetched by fetchProjects:", data);
 
-function ProjectsSection({ id }) {
-  // Slice the data to only display the first 4 projects
-  const featuredProjects = allProjectsData.slice(0, 4);
+                // If a limit is provided, slice the array; otherwise, use all data
+                setProjects(limit ? data.slice(0, limit) : data);
+            } catch (err) {
+                console.error("Error fetching projects:", err);
+                setError(err); // Set error state
+            } finally {
+                setLoading(false); // End loading
+            }
+        };
+        getProjects();
+    }, [limit]); // Dependency array: re-run if 'limit' prop changes
 
-  return (
-    <section id={id} className="scroll-target py-20 bg-gray-100">
-      <div className="container mx-auto px-6">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-800">Featured Projects</h2>
-          <Link
-            to="/projects"
-            className="bg-white text-olive-dark hover:bg-gray-200 font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 flex items-center"
-          >
-            View All Projects <span className="ml-1">&rarr;</span>
-          </Link>
-        </div>
+    // --- Loading, Error, and No Projects States ---
+    if (loading) {
+        return (
+            <section className={`py-16 ${isFeatured ? 'bg-gray-100' : 'bg-white'}`}>
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">Loading projects...</p>
+                </div>
+            </section>
+        );
+    }
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredProjects.map((project) => (
-            <div
-              key={project.id}
-              className="bg-white p-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105" // Added transition and transform classes
-            >
-              <h3 className="text-xl font-semibold text-olive-dark mb-2">{project.id}. {project.title}</h3>
-              <p className="text-gray-700 text-base mb-4">
-                {project.description}
-              </p>
-              <a href={project.link} className="text-olive hover:underline font-medium">Learn More &rarr;</a>
+    if (error) {
+        return (
+            <section className={`py-16 ${isFeatured ? 'bg-gray-100' : 'bg-white'}`}>
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-red-600">Error loading projects: {error.message}</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (projects.length === 0) {
+        return (
+            <section className={`py-16 ${isFeatured ? 'bg-gray-100' : 'bg-white'}`}>
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">No projects available at the moment.</p>
+                </div>
+            </section>
+        );
+    }
+
+    // --- Main Render for Projects ---
+    return (
+        <section className={`py-16 ${isFeatured ? 'bg-gray-100' : 'bg-white'}`}> {/* Background adjusts based on isFeatured */}
+            <div className="container mx-auto px-4">
+                {/* Conditional rendering for the section header based on 'isFeatured' prop */}
+                {isFeatured ? (
+                    // Header for the Featured Projects section on the homepage
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-3xl font-bold text-gray-800">Featured Projects</h2>
+                        <Link
+                            to="/projects-grants" // Link to your full projects page
+                            className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+                        >
+                            View All
+                        </Link>
+                    </div>
+                ) : (
+                    // Header for the full Projects & Grants page
+                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">All Projects & Grants</h2>
+                )}
+
+                {/* Grid container for project boxes - responsive layout */}
+                <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"> {/* Adjusted to 4 columns for desktop */}
+                    {/* Map through the projects array and render each project box */}
+                    {projects.map((project) => (
+                        <div
+                            key={project._id || project.id} // Ensure a unique key for each project item
+                            className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between border border-gray-200 hover:shadow-xl transition-all duration-300"
+                        >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2">{project.title}</h3>
+                            <p className="text-gray-700 text-sm mb-4 flex-grow line-clamp-3">{project.description}</p> {/* line-clamp for consistent description height */}
+                            {/* Link to individual project detail page (adjust path if needed) */}
+                            <Link
+                                to={project.link || `/projects/${project._id || project.id}`} // Use project's link or a dynamic path
+                                className="inline-block mt-4 bg-green-600 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-700 transition duration-300 self-start text-sm"
+                            >
+                                Learn More
+                            </Link>
+                        </div>
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 }
 
 export default ProjectsSection;

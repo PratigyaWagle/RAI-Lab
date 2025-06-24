@@ -1,122 +1,104 @@
-// src/pages/AllTeamMembersPage.jsx
-import React from 'react';
-import teamMembersData from '../data/teamMembersData'; // Import the team data
-import SocialIcon from '../components/SocialIcon'; // Import the new SocialIcon component
+// client/src/pages/AllTeamMembersPage.jsx
+import React, { useState, useEffect } from 'react';
+import TeamMemberCard from '../components/TeamMemberCard';
 
-function AllTeamMembersPage() {
-  const handleImageError = (e) => {
-    e.target.onerror = null; // Prevent infinite loop
-    e.target.src = '/images/placeholder-profile.jpg'; // Path to a fallback image
-    console.error("Failed to load image:", e.target.src);
-  };
+const AllTeamMembersPage = () => {
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/team');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTeamMembers(data);
+      } catch (error) {
+        console.error('Failed to fetch team members:', error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 min-h-screen text-center">
+        <h1 className="text-4xl font-bold text-gray-800 mb-12">Our Team</h1>
+        <p className="text-xl text-gray-700">Loading team members...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-16 min-h-screen text-center text-red-600">
+        <h1 className="text-4xl font-bold text-gray-800 mb-12">Our Team</h1>
+        <p className="text-xl">Error loading team members: {error.message}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen py-12 px-6 bg-gray-50">
-      <div className="container mx-auto">
-        <div className="lg:flex lg:space-x-12"> {/* Flex container for the two-column layout */}
+    <div className="container mx-auto px-4 py-16 min-h-screen">
+      {/* Main Two-Column Layout */}
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Left Column: Our Team, Description, Group Photo */}
+        <div className="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left">
+          <h1 className="text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+            Our Team
+          </h1>
+          <p className="text-lg text-gray-700 mb-8 max-w-lg md:max-w-none">
+            Meet the dedicated researchers, talented students, and supportive staff who drive our innovative work and contribute to our success.
+          </p>
 
-          {/* Left Column: Titles and Description - REMOVED STICKY CLASSES */}
-          <div className="lg:w-1/3 mb-8 lg:mb-0"> {/* Removed lg:sticky lg:top-12 self-start */}
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">Our Team</h1>
-            <p className="mt-1 text-lg text-gray-600">Meet the researchers, students, and staff behind our work</p>
+          {/* Group Photo Section */}
+          <div className="mb-8 w-full">
+            {/* Make sure the image file exists in public/images and the path is correct */}
+            <img
+              src="/images/GroupImage.png" // <--- IMPORTANT: Update this path if your image name is different!
+              alt="RAI Lab Group Photo"
+              className="w-full h-auto rounded-lg shadow-xl border-4 border-gray-200 object-cover"
+            />
           </div>
 
-          {/* Right Column: Team Members List */}
-          <div className="lg:w-2/3"> {/* This column will contain all the team member cards */}
+          {/* Optional: Add a small caption for the group photo */}
+          <p className="text-sm text-gray-500 mb-4">
+            (Caption: Our team infront of the Ingram Hall.)
+          </p>
 
-            {/* "Current Team" heading (always visible on the right side) */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-700 flex items-center">
-                 {/* Icon from AIT LAB layout */}
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h-2v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2H3m14 0h2a2 2 0 002-2v-2a2 2 0 00-2-2H7a2 2 0 00-2 2v2a2 2 0 002 2h2m4-12v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m.01 6a1 1 0 102 0 1 1 0 00-2 0zm7 0a1 1 0 102 0 1 1 0 00-2 0z" />
-                 </svg>
-                Current Team
-              </h2>
-            </div>
+        </div>
 
-            <div className="space-y-6"> {/* Space out individual member cards */}
-              {teamMembersData.map(member => (
-                <div key={member.id} className="bg-white rounded-lg shadow-sm overflow-hidden md:flex items-start p-6 border border-gray-100">
-                  {/* Image Section (Left) */}
-                  <div className="flex-shrink-0 flex justify-center mb-4 md:mb-0 md:mr-6">
-                    <img
-                      src={`/images/${member.image}`}
-                      alt={member.name}
-                      className="w-32 h-32 rounded-lg object-cover"
-                      onError={handleImageError}
-                    />
-                  </div>
-
-                  {/* Text Content Section (Right) */}
-                  <div className="flex-grow text-center md:text-left">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-gray-600 text-sm mb-3">{member.title}</p>
-                    {/* Only show description if it exists */}
-                    {member.description && (
-                       <p className="text-gray-700 text-sm leading-relaxed mb-4">{member.description}</p>
-                    )}
-
-                    {/* Social Icons - AIT LAB layout shows these horizontally near the description */}
-                    <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                        {/* View Profile Button */}
-                        {member.social.profile && (
-                           <a href={member.social.profile} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                               View Profile
-                           </a>
-                        )}
-                        {member.social.email && (
-                          <SocialIcon
-                            type="email"
-                            url={member.social.email}
-                            label="Email"
-                            className="text-gray-500 hover:text-gray-700"
-                          />
-                        )}
-
-                        {member.social.linkedin && (
-                          <SocialIcon
-                            type="linkedin"
-                            url={member.social.linkedin}
-                            label="LinkedIn"
-                            className="text-gray-500 hover:text-gray-700"
-                          />
-                        )}
-
-                        {member.social.googleScholar && (
-                            <SocialIcon
-                                type="googleScholar"
-                                url={member.social.googleScholar}
-                                label="Google Scholar"
-                                className="text-gray-500 hover:text-gray-700"
-                            />
-                        )}
-                        {member.social.researchgate && (
-                            <SocialIcon
-                                type="researchgate"
-                                url={member.social.researchgate}
-                                label="ResearchGate"
-                                className="text-gray-500 hover:text-gray-700"
-                            />
-                        )}
-                        {member.social.website && (
-                            <SocialIcon
-                                type="website"
-                                url={member.social.website}
-                                label="Website"
-                                className="text-gray-500 hover:text-gray-700"
-                            />
-                        )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Right Column: Current Team Members List */}
+        <div className="md:w-2/3">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center md:text-left">
+            Current Team
+          </h2>
+          <div className="space-y-8">
+            {teamMembers.map((member) => (
+              <TeamMemberCard key={member._id} member={member} />
+            ))}
           </div>
         </div>
       </div>
+
+      {/* You can add sections for Alumni or Collaborators here similarly outside the main flex if they span full width, or inside if they fit the columns */}
+      {/*
+      <section className="mt-16">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Alumni</h2>
+        <div className="space-y-8">
+          {/ * Filter and map alumni here * /}
+        </div>
+      </section>
+      */}
     </div>
   );
-}
+};
 
 export default AllTeamMembersPage;

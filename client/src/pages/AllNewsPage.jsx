@@ -1,68 +1,78 @@
 // src/pages/AllNewsPage.jsx
-import React from 'react';
-// Link is no longer needed if Back to Homepage button is removed
-// import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-function AllNewsPage() {
+const AllNewsPage = () => {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAllNews = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/news'); // Fetch all news
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setNews(data); // Set all fetched news
+      } catch (error) {
+        console.error("Failed to fetch all news:", error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllNews();
+  }, []); // Empty dependency array means this effect runs once after the initial render
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 min-h-screen">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">All News & Announcements</h1>
+        <p className="text-center">Loading all news...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-16 min-h-screen">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">All News & Announcements</h1>
+        <p className="text-center text-red-600">Error loading news: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (news.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-16 min-h-screen">
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">All News & Announcements</h1>
+        <p className="text-center text-gray-600">No news available at the moment.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-6">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">All Latest News & Updates</h1>
-
-        <p className="text-lg text-gray-700 text-center mb-12">
-          This page features a complete archive of news, announcements, and updates from the RAI Lab.
-        </p>
-
-        {/* Example News Item 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div
-            className="bg-white p-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105" // Added transition and transform classes
-          >
-            <h3 className="text-xl font-semibold text-olive-dark mb-2">Lab Awarded New Grant for AI Ethics</h3>
-            <p className="text-gray-600 text-sm mb-3">June 15, 2025</p>
-            <p className="text-gray-700 text-base">
-              Our lab has successfully secured funding for a groundbreaking project on ethical AI governance.
-            </p>
-            <div className="mt-4">
-              <a href="#" className="text-olive hover:underline text-sm font-medium">Read Full Story</a>
-            </div>
+    <div className="container mx-auto px-4 py-16 min-h-screen">
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">All News & Announcements</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Ensure the key is item._id */}
+        {news.map((item) => (
+          <div key={item._id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h2>
+            {/* Ensure item.date exists and is a valid date */}
+            <p className="text-sm text-gray-500 mb-4">{new Date(item.date).toLocaleDateString()}</p>
+            <p className="text-gray-700 mb-4">{item.description}</p>
+            <a href={item.link} className="text-blue-600 hover:underline inline-flex items-center" target="_blank" rel="noopener noreferrer">
+              Read More
+              <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
           </div>
-
-          {/* Example News Item 2 */}
-          <div
-            className="bg-white p-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105" // Added transition and transform classes
-          >
-            <h3 className="text-xl font-semibold text-olive-dark mb-2">Professor Smith to Keynote at AI Summit</h3>
-            <p className="text-gray-600 text-sm mb-3">May 28, 2025</p>
-            <p className="text-gray-700 text-base">
-              Professor Jane Smith will deliver a keynote speech on explainable AI at the upcoming global summit.
-            </p>
-            <div className="mt-4">
-              <a href="#" className="text-olive hover:underline text-sm font-medium">Event Details</a>
-            </div>
-          </div>
-
-          {/* Example News Item 3 */}
-          <div
-            className="bg-white p-6 rounded-lg shadow-md transition duration-300 transform hover:scale-105" // Added transition and transform classes
-          >
-            <h3 className="text-xl font-semibold text-olive-dark mb-2">New Publication: "AI and Society"</h3>
-            <p className="text-gray-600 text-sm mb-3">April 10, 2025</p>
-            <p className="text-gray-700 text-base">
-              Our latest research on the societal impact of AI has been published in a leading journal.
-            </p>
-            <div className="mt-4">
-              <a href="#" className="text-olive hover:underline text-sm font-medium">View Publication</a>
-            </div>
-          </div>
-          {/* Add more news items as needed */}
-        </div>
-
-        {/* The "Back to Homepage" button div has been removed from here */}
-
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default AllNewsPage;

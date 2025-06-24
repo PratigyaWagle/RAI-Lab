@@ -1,12 +1,12 @@
 // src/components/HeroSection.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Make sure Link is imported from react-router-dom
 
 function HeroSection({ id }) {
   const buttonClasses = "inline-block bg-olive-accent text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-olive-darker transition-transform transform hover:scale-105";
 
   // Adjusted descBoxClasses for a slightly bigger size
-  const descBoxClasses = "bg-gray-100 text-gray-800 text-base font-semibold px-4 py-2 rounded-full shadow-md"; // Changed size classes
+  const descBoxClasses = "bg-gray-100 text-gray-800 text-base font-semibold px-4 py-2 rounded-full shadow-md";
 
   return (
     <section id={id} className="min-h-[80vh] flex items-center bg-white">
@@ -30,9 +30,10 @@ function HeroSection({ id }) {
         </div>
 
         <div className="flex justify-center space-x-4">
-          <a href="#research" className={buttonClasses}>
+          {/* Changed <a> to <Link> and 'href' to 'to' for proper React Router navigation */}
+          <Link to="/projects-grants" className={buttonClasses}> {/* This will navigate to the /projects-grants route */}
             Explore Our Work
-          </a>
+          </Link>
           <Link to="/publications" className={buttonClasses}>
             View Publications
           </Link>
