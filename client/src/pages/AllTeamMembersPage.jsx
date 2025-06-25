@@ -1,6 +1,8 @@
 // client/src/pages/AllTeamMembersPage.jsx
+
 import React, { useState, useEffect } from 'react';
-import TeamMemberCard from '../components/TeamMemberCard';
+import TeamMemberCard from '../components/TeamMemberCard'; // This import path looks correct
+import { teamMembersData as localTeamMembersData } from '../data/teamMemberData'; // This import path looks correct
 
 const AllTeamMembersPage = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -8,95 +10,84 @@ const AllTeamMembersPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/team');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setTeamMembers(data);
-      } catch (error) {
-        console.error('Failed to fetch team members:', error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTeamMembers();
+    setLoading(true);
+    try {
+      setTeamMembers(localTeamMembersData);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load local team members data.");
+      console.error("Error loading local team members data:", err);
+      setLoading(false);
+    }
   }, []);
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-16 min-h-screen text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-12">Our Team</h1>
-        <p className="text-xl text-gray-700">Loading team members...</p>
+      <div className="container mx-auto px-6 py-20 text-center">
+        <p className="text-gray-600">Loading team members...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-16 min-h-screen text-center text-red-600">
-        <h1 className="text-4xl font-bold text-gray-800 mb-12">Our Team</h1>
-        <p className="text-xl">Error loading team members: {error.message}</p>
+      <div className="container mx-auto px-6 py-20 text-center">
+        <p className="text-red-500">Error loading team members: {error}</p>
       </div>
     );
   }
 
+  // Define the path for your group photo here
+  const groupPhotoUrl = `${process.env.PUBLIC_URL}/images/group_image.png`; // Make sure 'group_image.png' is the correct filename
+
   return (
-    <div className="container mx-auto px-4 py-16 min-h-screen">
-      {/* Main Two-Column Layout */}
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Left Column: Our Team, Description, Group Photo */}
-        <div className="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left">
-          <h1 className="text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
-            Our Team
-          </h1>
-          <p className="text-lg text-gray-700 mb-8 max-w-lg md:max-w-none">
-            Meet the dedicated researchers, talented students, and supportive staff who drive our innovative work and contribute to our success.
-          </p>
+    <div className="py-20">
+      <div className="container mx-auto px-6">
+        {/* --- START OF LAYOUT MODIFICATION --- */}
+        {/* Main two-column layout: flex-col on small screens, flex-row on medium screens and up */}
+        <div className="flex flex-col md:flex-row md:space-x-12"> {/* md:space-x-12 for spacing between columns */}
 
-          {/* Group Photo Section */}
-          <div className="mb-8 w-full">
-            {/* Make sure the image file exists in public/images and the path is correct */}
-            <img
-              src="/images/GroupImage.png" // <--- IMPORTANT: Update this path if your image name is different!
-              alt="RAI Lab Group Photo"
-              className="w-full h-auto rounded-lg shadow-xl border-4 border-gray-200 object-cover"
-            />
+          {/* LEFT COLUMN: "Our Team" Header, Description, and Group Photo */}
+          <div className="md:w-1/3 mb-8 md:mb-0"> {/* Occupies 1/3 width on medium screens and up */}
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Team</h2> {/* New header */}
+            <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              Meet the researchers, students, and staff behind our work.
+            </p>
+            {/* Group Photo Section */}
+            <div className="relative w-full overflow-hidden rounded-lg shadow-lg">
+              <img
+                src={groupPhotoUrl}
+                alt="RAI Lab Group"
+                className="w-full h-auto object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; // Prevents infinite loop if fallback also fails
+                  e.target.src = `${process.env.PUBLIC_URL}/images/placeholder_group.png`; // Fallback image for group photo
+                }}
+              />
+              {/* Optional: Add a caption for the group photo */}
+              <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-center p-2 text-sm">
+                The RAI Lab Team
+              </div>
+            </div>
           </div>
 
-          {/* Optional: Add a small caption for the group photo */}
-          <p className="text-sm text-gray-500 mb-4">
-            (Caption: Our team infront of the Ingram Hall.)
-          </p>
-
-        </div>
-
-        {/* Right Column: Current Team Members List */}
-        <div className="md:w-2/3">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center md:text-left">
-            Current Team
-          </h2>
-          <div className="space-y-8">
-            {teamMembers.map((member) => (
-              <TeamMemberCard key={member._id} member={member} />
-            ))}
+          {/* RIGHT COLUMN: "Current Team" Header and Individual Member List */}
+          <div className="md:w-2/3"> {/* Occupies 2/3 width on medium screens and up */}
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Current Team</h2> {/* New header */}
+            {/* This div replaces the grid and adds vertical spacing between each TeamMemberCard */}
+            <div className="space-y-6">
+              {teamMembers.length > 0 ? (
+                teamMembers.map((member, index) => (
+                  <TeamMemberCard key={member.name || index} member={member} />
+                ))
+              ) : (
+                <p className="col-span-full text-center text-gray-500">No team members to display.</p>
+              )}
+            </div>
           </div>
         </div>
+        {/* --- END OF LAYOUT MODIFICATION --- */}
       </div>
-
-      {/* You can add sections for Alumni or Collaborators here similarly outside the main flex if they span full width, or inside if they fit the columns */}
-      {/*
-      <section className="mt-16">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Alumni</h2>
-        <div className="space-y-8">
-          {/ * Filter and map alumni here * /}
-        </div>
-      </section>
-      */}
     </div>
   );
 };

@@ -75,7 +75,7 @@ function Header() {
     <header id="header" className="w-full py-4 bg-olive-accent text-white shadow-md sticky top-0 z-10">
       <div className="container mx-auto flex justify-between items-center px-6">
         <Link to="/" className="flex items-center space-x-3 text-2xl font-bold text-white">
-          <img src="/images/RAI-logo.png" alt="RAI Lab Logo" className="h-10 w-auto" />
+          <img src={`${process.env.PUBLIC_URL}/images/rai_logo.png`} alt="RAI Lab Logo" className="h-10 w-auto" />
           <span> RAI Lab </span>
         </Link>
 

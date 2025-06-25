@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5000;
 
 // Import Mongoose Models
 const News = require('./models/News');
-const TeamMember = require('./models/TeamMember');
 const Project = require('./models/Project');
 const Publication = require('./models/Publication'); // Import the Publication model
 
@@ -49,29 +48,6 @@ app.get('/api/news/:id', async (req, res) => {
   }
 });
 
-// Team Members Routes
-app.get('/api/team', async (req, res) => {
-  try {
-    const teamMembers = await TeamMember.find({});
-    res.json(teamMembers);
-  } catch (err) {
-    console.error('Error fetching team members:', err);
-    res.status(500).json({ message: 'Error fetching team members', error: err.message });
-  }
-});
-
-app.get('/api/team/:id', async (req, res) => {
-  try {
-    const teamMember = await TeamMember.findById(req.params.id);
-    if (!teamMember) {
-      return res.status(404).json({ message: 'Team member not found' });
-    }
-    res.json(teamMember);
-  } catch (err) {
-      console.error('Error fetching single team member:', err);
-      res.status(500).json({ message: 'Error fetching team member', error: err.message });
-  }
-});
 
 
 // Projects & Grants Routes

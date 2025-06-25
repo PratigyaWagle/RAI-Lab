@@ -1,31 +1,41 @@
 // client/src/components/TeamMemberCard.jsx
+
 import React from 'react';
 
 const TeamMemberCard = ({ member }) => {
   const social = member.social || {};
 
+  // This constructs the correct path for individual member photos
+  const imageUrl = `${process.env.PUBLIC_URL}/images/${member.image}`;
+
   return (
-    <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-md p-6 mb-8 items-start space-y-4 md:space-y-0 md:space-x-6 w-full">
-      {/* Image Section - Left Column */}
-      <div className="flex-shrink-0 w-full md:w-1/4 flex justify-center md:justify-start">
+    // This wrapper ensures the card is a flex container, aligning items horizontally
+    // and setting a consistent background/shadow.
+    <div className="flex bg-white rounded-lg shadow-md p-6 items-start space-x-6 w-full">
+      {/* Image Section: fixed width/height for circular image */}
+      <div className="flex-shrink-0 w-36 h-36">
         <img
-          src={`/images/${member.image}`} // Corrected path: removed /team/
+          src={imageUrl}
           alt={member.name}
-          className="w-36 h-36 md:w-48 md:h-48 rounded-full object-cover border-4 border-gray-200 shadow-sm"
-          onError={(e) => { e.target.onerror = null; e.target.src = '/images/placeholder-person.jpg'; }}
+          className="w-full h-full rounded-full object-cover border-4 border-gray-200 shadow-sm"
+          onError={(e) => {
+            e.target.onerror = null; // Prevents infinite loop if fallback also fails
+            // Fallback to a placeholder if the primary image isn't found
+            e.target.src = `${process.env.PUBLIC_URL}/images/placeholder_person.png`;
+          }}
         />
       </div>
 
-      {/* Details Section - Right Column */}
-      <div className="flex-grow text-center md:text-left">
+      {/* Details Section: Takes remaining space, aligns text to the left */}
+      <div className="flex-grow text-left">
         <h3 className="text-2xl font-bold text-gray-900 mb-1">{member.name}</h3>
         <p className="text-lg text-gray-700 mb-2">{member.title}</p>
         {member.description && (
           <p className="text-gray-600 mb-4 leading-relaxed">{member.description}</p>
         )}
 
-        {/* Social Links */}
-        <div className="flex justify-center md:justify-start space-x-4 mt-4">
+        {/* Social Links: Aligned to the left */}
+        <div className="flex justify-start space-x-4 mt-4">
           {social.email && (
             <a
               href={`mailto:${social.email}`}
