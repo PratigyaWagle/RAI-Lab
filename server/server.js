@@ -14,7 +14,9 @@ const Project = require('./models/Project');
 const Publication = require('./models/Publication'); // Import the Publication model
 
 // Middleware
-app.use(cors()); // Use CORS middleware
+app.use(cors(origin: 'https://rai-lab-vercel.app' })); 
+
+// Use CORS middleware
 app.use(express.json()); // Body parser for JSON data
 
 // Connect to MongoDB
