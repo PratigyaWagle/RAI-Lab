@@ -1,0 +1,66 @@
+// src/data/posterPublications.js
+
+const posterPublications = [
+    {
+        id: "pub-003",
+        title: "A Survey on Explainable AI Techniques for Financial Predictions",
+        authors: ["Jessica Saddington", "Dr. Anandi Dutta"],
+        journalConference: "Financial AI Summit 2024 (Poster Session)",
+        publicationDate: "2024-06-15",
+        abstract: "This poster summarizes various XAI techniques applied to financial forecasting models, evaluating their effectiveness and interpretability.",
+        link: "https://example.com/pub3",
+        type: "Poster",
+    },
+    {
+        id: "pub-006",
+        title: "Interactive Visualization of AI Decision-Making Processes",
+        authors: ["Jessica Saddington", "Jay Jang"],
+        journalConference: "IEEE Vis Conference (Poster)",
+        publicationDate: "2023-10-05",
+        abstract: "We present an interactive poster demonstrating a tool for visualizing and understanding complex AI model decision paths.",
+        link: "https://example.com/pub1",
+        type: "Poster",
+    },
+    {
+        id: "pub-007",
+        title: "Development of Conversational AI for Mental Health Support",
+        authors: ["Anandi Dutta", "Shivani Mruthyunjaya"],
+        journalConference: "Health Scholar Showcase, Translational Health Research Center, Texas State University",
+        publicationDate: "2025-04-04",
+        abstract: "This poster details the development and preliminary evaluation of a conversational AI system designed to provide accessible and empathetic mental health support.",
+        link: "https://example.com/pub-mental-health-ai",
+        type: "Poster",
+    },
+    {
+        id: "pub-008",
+        title: "Task-specific Evaluation for Biomedical Large Language Models (LLMs) for the HealthCare Industry",
+        authors: ["Anandi Dutta"],
+        journalConference: "TechConnect World Innovation Conference and Expo",
+        publicationDate: "2025-06-09",
+        abstract: "This presentation outlines a novel framework for evaluating the performance of biomedical Large Language Models (LLMs) on specific tasks relevant to the healthcare industry, ensuring their accuracy and reliability in clinical applications.",
+        link: "https://example.com/pub-biomed-llm",
+        type: "Poster",
+    },
+    {
+        id: "pub-009",
+        title: "From Prediction to Action: A Hybrid ML-RL Model for Smart Grid Stability Control",
+        authors: ["Kazi Sifatul Islam", "Anandi Dutta"],
+        journalConference: "Graduate Student Research Conference (GSRC'2025), The Graduate College, Texas State University",
+        publicationDate: "2025-05-01",
+        abstract: "We propose a hybrid machine learning and reinforcement learning model designed to predict power grid instabilities and enact real-time, optimized control strategies for enhanced grid reliability and efficiency.",
+        link: "https://example.com/pub-hybrid-ml-rl",
+        type: "Poster",
+    },
+    {
+        id: "pub-010",
+        title: "AI-Driven Predictions of In-Hospital Mortality After Orthopedic Surgery",
+        authors: ["Li Chih-ying", "Anandi Dutta"],
+        journalConference: "AIM-AHEAD Annual Meeting",
+        publicationDate: "2025-07-08",
+        abstract: "This poster presents an AI-driven predictive model for assessing the risk of in-hospital mortality following orthopedic surgery, aiming to aid clinicians in early intervention and patient management.",
+        link: "https://example.com/pub-ortho-mortality",
+        type: "Poster",
+    },
+];
+
+export default posterPublications;

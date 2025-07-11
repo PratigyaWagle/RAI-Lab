@@ -1,50 +1,14 @@
-// client/src/pages/AllProjectsPage.jsx
-import React, { useState, useEffect } from 'react';
+// src/pages/AllProjectsPage.jsx
+import React from 'react';
+// Import your local projects data directly
+import projectsData from '../data/projectsData'; // Adjust this path if your 'data' folder is elsewhere
 
-const AllProjectsPage = () => { // Corrected component name
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const AllProjectsPage = () => {
+  // Optional: You can sort projects here if you want a specific order (e.g., newest first)
+  // For example, to sort by startDate, newest first:
+  const sortedProjects = [...projectsData].sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/projects'); // Fetch all projects
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setProjects(data); // Set all fetched projects
-      } catch (error) {
-        console.error("Failed to fetch projects:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []); // Empty dependency array means this effect runs once after the initial render
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-16 min-h-screen">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Projects & Grants</h1>
-        <p className="text-center">Loading projects...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-16 min-h-screen">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Projects & Grants</h1>
-        <p className="text-center text-red-600">Error loading projects: {error.message}</p>
-      </div>
-    );
-  }
-
-  if (projects.length === 0) {
+  if (sortedProjects.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16 min-h-screen">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Projects & Grants</h1>
@@ -57,11 +21,12 @@ const AllProjectsPage = () => { // Corrected component name
     <div className="container mx-auto px-4 py-16 min-h-screen">
       <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Projects & Grants</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((project) => (
-          <div key={project._id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col">
+        {sortedProjects.map((project) => (
+          // Use project.id for the key if you added it, otherwise use index
+          <div key={project.id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col">
             {project.imageUrl && (
               <img
-                src={`/images/${project.imageUrl}`} // Adjust path if your images are elsewhere
+                src={project.imageUrl} // Use the directly provided URL from data
                 alt={project.title}
                 className="w-full h-48 object-cover rounded-t-lg mb-4"
               />
@@ -75,12 +40,12 @@ const AllProjectsPage = () => { // Corrected component name
 
             {project.isGrant && (
               <p className="text-sm text-purple-700 mb-1">
-                **Grant from: {project.fundingAgency}**
+                <span className="font-bold">Grant from:</span> {project.fundingAgency}
               </p>
             )}
             {project.principalInvestigators && project.principalInvestigators.length > 0 && (
               <p className="text-sm text-gray-500 mb-1">
-                **PIs: {project.principalInvestigators.join(', ')}**
+                <span className="font-bold">PIs:</span> {project.principalInvestigators.join(', ')}
               </p>
             )}
             {project.status && (
@@ -110,4 +75,4 @@ const AllProjectsPage = () => { // Corrected component name
   );
 };
 
-export default AllProjectsPage; // Corrected export name
+export default AllProjectsPage;

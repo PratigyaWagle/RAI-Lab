@@ -17,8 +17,7 @@ function ContactSection({ id }) {
 
           {/* Visit Us */}
           <div className="flex items-start mb-6">
-            {/* You might need to add Font Awesome or similar icon library for 'fa-map-marker-alt' to show.
-                For now, it's a placeholder. If icons don't show, you can remove the <i> tag. */}
+            
             <i className="fas fa-map-marker-alt text-olive-accent text-2xl mr-4 mt-1"></i>
             <div>
               <h4 className="text-xl font-medium text-gray-800 mb-1">Visit Us</h4>
@@ -30,7 +29,7 @@ function ContactSection({ id }) {
             </div>
           </div>
 
-          {/* Email Us */}
+         
           <div className="flex items-start mb-6">
             <i className="fas fa-envelope text-olive-accent text-2xl mr-4 mt-1"></i>
             <div>
@@ -41,16 +40,7 @@ function ContactSection({ id }) {
             </div>
           </div>
 
-          {/* Optional: Phone Number if needed */}
-          {/* <div className="flex items-start mb-6">
-            <i className="fas fa-phone text-olive-accent text-2xl mr-4 mt-1"></i>
-            <div>
-              <h4 className="text-xl font-medium text-gray-800 mb-1">Call Us</h4>
-              <p className="text-gray-700">+1 (123) 456-7890</p>
-            </div>
-          </div> */}
 
-          {/* Social Media Links - Keep these as placeholders for now, Font Awesome required for icons */}
           <div className="mt-8 text-center">
             <a href="#!" className="text-gray-600 hover:text-olive-accent mx-3 text-3xl" aria-label="LinkedIn"><i className="fab fa-linkedin"></i></a>
             <a href="#!" className="text-gray-600 hover:text-olive-accent mx-3 text-3xl" aria-label="Twitter"><i className="fab fa-twitter"></i></a>

@@ -1,92 +1,64 @@
 // src/components/NewsSection.jsx
-import React, { useState, useEffect } from 'react';
-// It seems you're directly fetching from localhost:5000/api/news here.
-// If you intend to use the centralized fetchNews from appData.js, you might uncomment the line below
-// import { fetchNews } from '../data/appData';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import React from 'react';
+// Import your local news data directly
+import newsData from '../data/newsData'; // Make sure this path is correct relative to NewsSection.jsx
+import { Link } from 'react-router-dom'; // Import Link for internal navigation
 
 const NewsSection = () => {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   // Define the custom olive green color
   const oliveGreen = '#4a542b';
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        // Your existing fetch call. Note: If you want to use the proxy, this should be '/api/news'
-        // or if you want to use the centralized function, it should be 'const data = await fetchNewsFromAppData();'
-        const response = await fetch('http://localhost:5000/api/news'); 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        // Limit to 3 for the home page section
-        setNews(data.slice(0, 3));
-      } catch (error) {
-        console.error("Failed to fetch news:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Sort all news by date (newest first) and then take the first 3 items for the homepage section.
+  // We create a copy with the spread operator (...) before sorting to avoid mutating the original imported array.
+  const recentNews = [...newsData]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 3); // Limit to 3 for the home page section
 
-    fetchNews();
-  }, []); // Empty dependency array means this effect runs once after the initial render
-
-  if (loading) {
+  // No need for loading or error states as the data is directly available.
+  // We only check if there are no news items to display.
+  if (recentNews.length === 0) {
     return (
-      <section id="news-section" className="py-16 bg-gray-50">
+      <section id="news-section" className="py-16 bg-gray-50 rounded-lg shadow-inner">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Latest News</h2>
-          <p className="text-center">Loading news...</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section id="news-section" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Latest News</h2>
-          <p className="text-center text-red-600">Error loading news: {error.message}</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (news.length === 0) {
-    return (
-      <section id="news-section" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Latest News</h2>
-          <p className="text-center text-gray-600">No news available at the moment.</p>
+          <p className="text-center text-gray-600">No recent news available at the moment.</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="news-section" className="py-16 bg-gray-50">
+    <section id="news-section" className="py-16 bg-gray-50 rounded-lg shadow-inner">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Latest News</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {news.map((item) => (
-            <div key={item._id} className="bg-white rounded-lg shadow-md p-6">
+          {recentNews.map((item, index) => (
+            // Using 'index' as a key is acceptable for static lists that don't change order or get filtered.
+            // If your news items had a unique 'id' in newsData.js, it would be preferable to use that.
+            <div key={index} className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
               {/* Format date for better readability */}
-              <p className="text-sm text-gray-500 mb-4">{new Date(item.date).toLocaleDateString()}</p>
+              <p className="text-sm text-gray-500 mb-4">
+                {new Date(item.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
               <p className="text-gray-700 mb-4">{item.description}</p>
-              {/* Changed to Link and applied custom color */}
-              <Link to={`/news/${item._id}`} // Assuming you have a route for individual news items
-                    className="hover:underline" // Retained underline on hover
-                    style={{ color: oliveGreen }} // Applied custom olive green color
-              >
-                Read More
-              </Link>
+              {item.link && ( // Only render the link if it exists
+                <a
+                  href={item.link}
+                  className="text-blue-600 hover:underline inline-flex items-center"
+                  style={{ color: oliveGreen }} // Applied custom olive green color
+                  target="_blank" // Open link in a new tab
+                  rel="noopener noreferrer" // Security best practice for target="_blank"
+                >
+                  Read More
+                  {/* SVG icon for visual appeal */}
+                  <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+              )}
             </div>
           ))}
         </div>
