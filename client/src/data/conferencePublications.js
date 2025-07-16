@@ -11,8 +11,7 @@ const conferencePublications = [
         link: "https://example.com/pub2",
         type: "Conference Paper",
     },
-    
-    {
+     {
         id: "pub-011",
         title: "Modeling Distracted Driving: Analyzing Driver Gaze, Vehicle Positioning, and Psychological Response for Enhanced Traffic Safety",
         authors: ["Barua, S.", "Dutta, Anandi"],
