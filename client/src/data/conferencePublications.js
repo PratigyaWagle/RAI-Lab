@@ -16,7 +16,7 @@ const conferencePublications = [
         title: "Hybrid ML-RL Approach for Smart Grid Stability Prediction and Optimized Control Strategy ",
         authors: ["Shivani Mruthyunjaya", "Kazi Sifatul Islam", "Anandi Dutta"],
         journalConference: "IEEE Smart World Congress Conference (SWC 2025)",
-        publicationDate: "August 18-20, 2025",
+        publicationDate: "2025-08-18",
         abstract: "An exploration of reinforcement learning agents for dynamic energy distribution and optimization within smart grid infrastructures.",
         link: "https://example.com/pub1",
         type: "Conference Paper",
