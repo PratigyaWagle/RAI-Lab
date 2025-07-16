@@ -11,16 +11,7 @@ const conferencePublications = [
         link: "https://example.com/pub2",
         type: "Conference Paper",
     },
-    {
-        id: "pub-005",
-        title: "Hybrid ML-RL Approach for Smart Grid Stability Prediction and Optimized Control Strategy ",
-        authors: ["Shivani Mruthyunjaya", "Kazi Sifatul Islam", "Anandi Dutta"],
-        journalConference: "IEEE Smart World Congress Conference (SWC 2025)",
-        publicationDate: "2025-08-18",
-        abstract: "An exploration of reinforcement learning agents for dynamic energy distribution and optimization within smart grid infrastructures.",
-        link: "https://example.com/pub1",
-        type: "Conference Paper",
-    },
+    
     {
         id: "pub-011",
         title: "Modeling Distracted Driving: Analyzing Driver Gaze, Vehicle Positioning, and Psychological Response for Enhanced Traffic Safety",
