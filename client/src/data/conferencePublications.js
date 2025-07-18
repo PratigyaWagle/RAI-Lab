@@ -1,16 +1,7 @@
 // src/data/conferencePublications.js
 
 const conferencePublications = [
-    {
-        id: "pub-002",
-        title: "Deep Learning for Autonomous Drone Navigation in Urban Environment",
-        authors: ["Jay Jang", "Kazi Sifatul Islam"],
-        journalConference: "International Conference on Robotics and Automation (ICRA 2023)",
-        publicationDate: "2023-05-29",
-        abstract: "We present a novel deep learning framework for robust autonomous navigation of drones in complex urban settings, utilizing real-time sensor fusion.",
-        link: "https://example.com/pub2",
-        type: "Conference Paper",
-    },
+    
      {
         id: "pub-011",
         title: "Modeling Distracted Driving: Analyzing Driver Gaze, Vehicle Positioning, and Psychological Response for Enhanced Traffic Safety",
