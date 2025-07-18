@@ -3,7 +3,7 @@
 const conferencePublications = [
     {
         id: "pub-002",
-        title: "Deep Learning for Autonomous Drone Navigation in Urban Environments",
+        title: "Deep Learning for Autonomous Drone Navigation in Urban Environment( Changing here)",
         authors: ["Jay Jang", "Kazi Sifatul Islam"],
         journalConference: "International Conference on Robotics and Automation (ICRA 2023)",
         publicationDate: "2023-05-29",
