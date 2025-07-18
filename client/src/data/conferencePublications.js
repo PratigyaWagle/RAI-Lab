@@ -3,7 +3,7 @@
 const conferencePublications = [
     {
         id: "pub-002",
-        title: "Deep Learning for Autonomous Drone Navigation in Urban Environment( Changing here)",
+        title: "Deep Learning for Autonomous Drone Navigation in Urban Environment",
         authors: ["Jay Jang", "Kazi Sifatul Islam"],
         journalConference: "International Conference on Robotics and Automation (ICRA 2023)",
         publicationDate: "2023-05-29",
@@ -53,7 +53,7 @@ const conferencePublications = [
     },
     {
         id: "pub-015",
-        title: "Adaptive Thermal Comfort Modeling Using Machine Learning: a Generalizable, Low-Sensor Approach for Diverse Climates and Buildings",
+        title: "Adaptive Thermal Comfort Modeling Using Machine Learning: a Generalizable, Low-Sensor Approach for Diverse Climates and Buildings ( Changing here )",
         authors: ["Md. Sakif Uddin Khan", "Anandi Dutta", "Rashedul Hasan"],
         journalConference: "IEEE Smart World Congress 2025",
         publicationDate: "2025-08-18",
