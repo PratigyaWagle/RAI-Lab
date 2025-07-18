@@ -1,16 +1,7 @@
 // src/data/journalPublications.js
 
 const journalPublications = [
-    {
-        id: "pub-001",
-        title: "Ethical Considerations in AI for Public Health",
-        authors: ["Dr. Anandi Dutta", "Dr. Mathew O. Aibinu", "Shivani Mruthyunjaya"],
-        journalConference: "Journal of Medical AI Ethics",
-        publicationDate: "2024-03-10",
-        abstract: "This paper discusses the ethical implications of deploying AI solutions in public health systems, focusing on data privacy, algorithmic bias, and accountability.",
-        link: "https://example.com/pub1",
-        type: "Journal Article",
-    },
+    
     {
         id: "pub-004",
         title: "Bias Detection and Mitigation in Healthcare AI Models",
