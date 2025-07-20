@@ -1,0 +1,54 @@
+# Node.js dependencies
+/node_modules
+
+# Build output
+/build
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# dotenv environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS metadata
+*.swp
+*~
+
+# Tailwind JIT cache (if using)
+.tailwindcache
+
+# Optional: coverage reports from tests
+/coverage
+
+# Mac specific
+.AppleDouble
+.LSOverride
+Icon
+
+# Optional: Parcel, Next.js, or Vite caches (in case you switch setups)
+/.cache
+.next
+dist
+out
+
+# Misc
+*.log
