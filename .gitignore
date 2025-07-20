@@ -2,13 +2,12 @@
 node_modules/
 
 # Build output
-/build
-
-# System files
-.DS_Store
-Thumbs.db
+/build/
+dist/
+out/
 
 # Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -29,26 +28,19 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 
-# OS metadata
+# OS/system files
+.DS_Store
+Thumbs.db
 *.swp
 *~
-
-# Tailwind JIT cache (if using)
-.tailwindcache
-
-# Optional: coverage reports from tests
-/coverage
-
-# Mac specific
 .AppleDouble
 .LSOverride
 Icon
 
-# Optional: Parcel, Next.js, or Vite caches (in case you switch setups)
-/.cache
-.next
-dist
-out
+# Caches
+.tailwindcache/
+.cache/
+.next/
 
-# Misc
-*.log
+# Optional: coverage reports
+/coverage/
